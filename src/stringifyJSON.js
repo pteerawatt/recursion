@@ -45,25 +45,39 @@ var stringifyJSON = function(obj) {
   	  }	
   }
 
-  var isObject = function (obj) {
-  	// go to last index and check if array
-  		// if array, recall isArray
-  	if (obj === null) {
-  		return 'null';
-  	} else if (Array.isArray(obj)) {
-  		if (obj.length === 0) {
-  			return '[]';
-  		} else if (obj.length === 1) {
-  			if (typeof obj[0] === 'string') {
-  				return `[${isString(obj[0])}]`
-  			}
-  			return `[${obj[0].toString()}]`;
-  		} else if (obj.length > 1) {
-  			return `[${(isObject(obj.slice(0, obj.length -1))).toString()}` + `, ${obj[obj.length -1].toString()}]`
-  		}
+  // var isObject = function (obj) {
+  // 	// go to last index and check if array
+  // 		// if array, recall isArray
+  // 	if (obj === null) {
+  // 		return 'null';
+  // 	} else if (Array.isArray(obj)) {
+  // 		if (obj.length === 0) {
+  // 			return '[]';
+  // 		} else {
+  // 			var result = '[';
+  // 			for (var i = 0; i < obj.length; i++) {
+  // 				if (Array.isArray(obj[i])) {
+  // 					return '[' 
+  // 				} else {
+  // 					result += `${obj}`
+  // 				}
+  // 			}
+  // 		}
+  // 	} 
+  // }  
+
+
+  		// else if (obj.length === 1) {
+  		// 	if (typeof obj[0] === 'string') {
+  		// 		return `[${isString(obj[0])}]`
+  		// 	}
+  		// 	return `[${obj[0].toString()}]`;
+  		// } else if (obj.length > 1) {
+  		// 	return `[${(isObject(obj.slice(0, obj.length -1))).toString()}` + `, ${obj[obj.length -1].toString()}]`
+  		// }
   		
-  	}
-  }
+  	
+  
   if (typeof obj === 'boolean') {
   	resultString += isBoolean(obj);
   }
@@ -75,9 +89,17 @@ var stringifyJSON = function(obj) {
   if (typeof obj === 'number') {
   	resultString += isNumber(obj);
   }
-
-  if (typeof obj === 'object') {
-  	resultString += isObject(obj);
+  if (obj === null) {
+  	resultString += 'null';
+  }
+  if (typeof obj === 'object' && !!Array.isArray(obj)) {
+  	resultString += '[' + obj.reduce(function(acc, value) {
+  		if (value === undefined) {
+  			return [...acc, 'null']
+  		} else {
+  			return [...acc, stringifyJSON(value)]
+  		}
+  	}, []).join(',') + ']'
   }
 
   return resultString;
