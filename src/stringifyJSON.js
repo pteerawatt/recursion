@@ -53,7 +53,15 @@ var stringifyJSON = function(obj) {
   	} else if (Array.isArray(obj)) {
   		if (obj.length === 0) {
   			return '[]';
+  		} else if (obj.length === 1) {
+  			if (typeof obj[0] === 'string') {
+  				return `[${isString(obj[0])}]`
+  			}
+  			return `[${obj[0].toString()}]`;
+  		} else if (obj.length > 1) {
+  			return `[${(isObject(obj.slice(0, obj.length -1))).toString()}` + `, ${obj[obj.length -1].toString()}]`
   		}
+  		
   	}
   }
   if (typeof obj === 'boolean') {
