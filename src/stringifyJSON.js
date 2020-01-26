@@ -4,27 +4,9 @@
 // but you don't so you're going to write it from scratch:
 
 var stringifyJSON = function(obj) {
-  // this function takes in an object and turns it into a string
-  // we can access key and value of object (for key in obj)
 
-  // create an empty string
-  // if boolean return true or false
-  // if type of obj is string
-  	// return string
-  // if typeof = number
-  	// break the number into array
-  		// base case is when array.length is 0
-  		// starting wtih last item and move up till its done
-  // if typeof = array
-  	// take them out of nest
-  	// start with square brackets
-  	// base case is when array.length is 0
-  	// if element is string, use string function to add
-  	// if element is number use number function to add code
-  // if type of = object (.length is undefined)
-  	// 	use objects.keys
-  // if function return undefined
   var resultString = ''	
+
   var isBoolean = function (obj) {
   	if (obj === true) {
   		return 'true';
@@ -44,63 +26,49 @@ var stringifyJSON = function(obj) {
   	return obj.toString()
   	  }	
   }
-
-  // var isObject = function (obj) {
-  // 	// go to last index and check if array
-  // 		// if array, recall isArray
-  // 	if (obj === null) {
-  // 		return 'null';
-  // 	} else if (Array.isArray(obj)) {
-  // 		if (obj.length === 0) {
-  // 			return '[]';
-  // 		} else {
-  // 			var result = '[';
-  // 			for (var i = 0; i < obj.length; i++) {
-  // 				if (Array.isArray(obj[i])) {
-  // 					return '[' 
-  // 				} else {
-  // 					result += `${obj}`
-  // 				}
-  // 			}
-  // 		}
-  // 	} 
-  // }  
-
-
-  		// else if (obj.length === 1) {
-  		// 	if (typeof obj[0] === 'string') {
-  		// 		return `[${isString(obj[0])}]`
-  		// 	}
-  		// 	return `[${obj[0].toString()}]`;
-  		// } else if (obj.length > 1) {
-  		// 	return `[${(isObject(obj.slice(0, obj.length -1))).toString()}` + `, ${obj[obj.length -1].toString()}]`
-  		// }
-  		
-  	
   
   if (typeof obj === 'boolean') {
   	resultString += isBoolean(obj);
   }
 
-  if (typeof obj === 'string') {
+  else if (typeof obj === 'string') {
   	resultString += isString(obj);
   }
 
-  if (typeof obj === 'number') {
+  else if (typeof obj === 'number') {
   	resultString += isNumber(obj);
   }
-  if (obj === null) {
+  else if (obj === null) {
   	resultString += 'null';
   }
-  if (typeof obj === 'object' && !!Array.isArray(obj)) {
+
+  else if (typeof obj === 'object' && !!Array.isArray(obj)) {
+  	// take the array and call the stringify() on each of the element
+  	// turn it into a string
   	resultString += '[' + obj.reduce(function(acc, value) {
-  		if (value === undefined) {
-  			return [...acc, 'null']
-  		} else {
-  			return [...acc, stringifyJSON(value)]
-  		}
+  		return [...acc, stringifyJSON(value)]
   	}, []).join(',') + ']'
   }
+  else if (typeof obj == 'object' && obj.length === undefined) {
+  	// list out keys in array
+  	// join array with :value in between
+  	// use reduce to stringify each value
+  	var keys = Object.keys(obj);
+  	var values = Object.values(obj);
+  	if (Object.keys(obj).length === 0 || 'functions' in obj || 'undefined' in obj) {
+  		resultString += '{}';
+  	} else {
+  		// values.reduce(function(acc, item) {
+  		// 	return stringifyJSON(values);
+  		// }, []);
+  		var result = '{'
+  		for (var i = 0; i < keys.length; i++) {
+  			result += isString(keys[i]) + ':' + stringifyJSON(values[i]) + ',';
+  		}
+  		resultString = result.slice(0, result.length -1) + '}'
+  		console.log(result);
+  }
+	}
 
   return resultString;
 };
