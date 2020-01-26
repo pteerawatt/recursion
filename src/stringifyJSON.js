@@ -52,15 +52,12 @@ var stringifyJSON = function(obj) {
   else if (typeof obj == 'object' && obj.length === undefined) {
   	// list out keys in array
   	// join array with :value in between
-  	// use reduce to stringify each value
+  	// use stringify on each value
   	var keys = Object.keys(obj);
   	var values = Object.values(obj);
   	if (Object.keys(obj).length === 0 || 'functions' in obj || 'undefined' in obj) {
   		resultString += '{}';
   	} else {
-  		// values.reduce(function(acc, item) {
-  		// 	return stringifyJSON(values);
-  		// }, []);
   		var result = '{'
   		for (var i = 0; i < keys.length; i++) {
   			result += isString(keys[i]) + ':' + stringifyJSON(values[i]) + ',';
