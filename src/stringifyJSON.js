@@ -63,7 +63,6 @@ var stringifyJSON = function(obj) {
   			result += isString(keys[i]) + ':' + stringifyJSON(values[i]) + ',';
   		}
   		resultString = result.slice(0, result.length -1) + '}'
-  		console.log(result);
   }
 	}
 
